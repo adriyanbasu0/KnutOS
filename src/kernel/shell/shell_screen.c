@@ -42,7 +42,7 @@ void shell_screen_init(void)
 // print basic shell prompt
 void shell_prompt(void)
 {
-    printk(GFX_PURPLE, "\n┌─ KnutOS\n");
+    printk(GFX_PURPLE, "\n┌─ CoreFusion\n");
     printk(GFX_PURPLE, "└→ ");
 
     // set x, y barrier to last know cursor position

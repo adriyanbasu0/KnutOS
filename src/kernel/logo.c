@@ -12,15 +12,15 @@
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
 	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+	along with this program.  If not, see https://www.gnu.org/licenses/.
 */
 
-const char *small_logo_text =	"┌┐┌─┐         ┌┐ ┌───┐┌───┐\n"
-                                "│││┌┘        ┌┘└┐│┌─┐││┌─┐│\n"
-                                "│└┘┘ ┌─┐ ┌┐┌┐└┐┌┘││ │││└──┐\n"
-                                "│┌┐│ │┌┐┐││││ ││ ││ ││└──┐│\n"
-                                "│││└┐│││││└┘│ │└┐│└─┘││└─┘│\n"
-                                "└┘└─┘└┘└┘└──┘ └─┘└───┘└───┘\n";
+const char *small_logo_text =	" ______   ______   .______       _______  _______  __    __       _______. __    ______   .__   __. \n"
+                                "/      | /  __  \  |   _  \     |   ____||   ____||  |  |  |     /       ||  |  /  __  \  |  \ |  | \n"
+                                "|  ,----'|  |  |  | |  |_)  |    |  |__   |  |__   |  |  |  |    |   (----`|  | |  |  |  |   \|  | \n"
+                                "|  |     |  |  |  | |      /     |   __|  |   __|  |  |  |  |     \   \    |  | |  |  |  |  . `  | \n"
+                                "|  `----.|  `--'  | |  |\  \----.|  |____ |  |____ |  `--'  | .----)   |   |  | |  `--'  |  |  |\   | \n"
+                                " \______| \______/  | _| `._____||_______||_______| \______/  |_______/    |__|  \______/  |__|  \__| \n";
 
 const char *big_logo	    =	"MMMMMMMMMMMMMMMMMMMMMMMNKkdoooloolloox0WMMMMMMMMMMMMMMMMMMMXkl;'..    ..':oxKWMMMMMMMMMMMMMMMMMMMMMM\n"
                                 "MMMMMMMMMMMMMMMMMMMMWKd::lc;'...'..,:c;lKMMMMMMMMMMMMMMMMXd,.            'lc;cOWMMMMMMMMMMMMMMMMMMMM\n"
