@@ -67,13 +67,13 @@ void kmain(struct stivale2_struct *stivale2_struct)
 
     apic_init();
 
-    // keyboard_init(); // NOTE: is_keyboard_active is still false so no processing
+     keyboard_init(); // NOTE: is_keyboard_active is still false so no processing
 
     // TODO: proper timer
     // for (long i = 0; i < 5500000000; i++)	// ~10 seconds
     // 	asm ("nop");
 
-    // shell_screen_init();
+     shell_screen_init();
 
     for (;;)
         asm ("hlt");

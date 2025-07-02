@@ -34,6 +34,21 @@ uint8_t io_inb(uint16_t port)
     return ret;
 }
 
+// sends 16-bit data to an IO port
+void io_outw(uint16_t port, uint16_t value)
+{
+    asm volatile("outw %0, %1" : : "a"(value), "Nd"(port));
+}
+
+// receives 16-bit data from an IO port
+uint16_t io_inw(uint16_t port)
+{
+    uint16_t ret;
+    asm volatile("inw %1, %0" : "=a"(ret) : "Nd"(port));
+
+    return ret;
+}
+
 // another I/0 cycle on an unused, CPU-speed independent port
 void io_wait(void)
 {

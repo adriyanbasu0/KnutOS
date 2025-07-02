@@ -18,6 +18,8 @@
 #ifndef SHELL_SCREEN_H
 #define SHELL_SCREEN_H
 
+#include <firmware/acpi/acpi.h>
+
 extern struct GFX_Struct gfx;
 
 void shell_screen_init(void);

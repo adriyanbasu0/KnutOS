@@ -16,6 +16,7 @@
 */
 
 #include <firmware/acpi/tables/sdth.h>
+#include <firmware/acpi/tables/fadt.h>
 
 #ifndef ACPI_H
 #define ACPI_H
@@ -24,5 +25,6 @@ void acpi_init(struct stivale2_struct *stivale2_struct);
 int acpi_check_sdt_header(sdt_header_t *sdt_header, const char *signature);
 int acpi_verify_sdt_header_checksum(sdt_header_t *sdt_header, const char *signature);
 sdt_header_t *acpi_find_sdt_table(const char *signature);
+void acpi_shutdown(void);
 
 #endif

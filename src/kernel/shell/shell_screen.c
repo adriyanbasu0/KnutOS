@@ -22,6 +22,8 @@
 #include <shell/shell_screen.h>
 #include <libk/stdio/stdio.h>
 #include <libk/ssfn.h>
+#include <firmware/acpi/acpi.h>
+#include <libk/string/string.h>
 
 static int shell_prompt_x_barrier;
 static int shell_prompt_y_barrier;
@@ -48,6 +50,19 @@ void shell_prompt(void)
     shell_prompt_y_barrier = ssfn_dst.y;
 }
 
+static char shell_input_buffer[128];
+static int shell_input_index = 0;
+
+// Use strcmp from libk string
+static void shell_execute_command(const char *cmd) {
+    if (strcmp(cmd, "shutdown") == 0) {
+        printk(GFX_GREEN, "Shutting down via ACPI...\n");
+        acpi_shutdown();
+    } else {
+        printk(GFX_RED, "Unknown command: %s\n", cmd);
+    }
+}
+
 // get informations about what was being pressed
 // and just print if it is a valid ascii_character
 void shell_print_char(KEY_INFO_t key_info)
@@ -58,6 +73,10 @@ void shell_print_char(KEY_INFO_t key_info)
     // if return is pressed, make a newline and create a new prompt
     else if (key_info.ascii_character == KEY_RETURN)
     {
+        shell_input_buffer[shell_input_index] = '\0';
+        shell_execute_command(shell_input_buffer);
+        shell_input_index = 0;
+
         // move barrier if screen scolls
         if (ssfn_dst.y + gfx.glyph_height == gfx.fb_height)
             shell_prompt_y_barrier += gfx.glyph_height;
@@ -70,11 +89,15 @@ void shell_print_char(KEY_INFO_t key_info)
     {
         if (ssfn_dst.x == shell_prompt_x_barrier && ssfn_dst.y == shell_prompt_y_barrier)
             return;
-
+        if (shell_input_index > 0) shell_input_index--;
         printk(GFX_BLUE, "\b");
     }
     else
     {
+        if (shell_input_index < (int)sizeof(shell_input_buffer) - 1) {
+            shell_input_buffer[shell_input_index++] = key_info.ascii_character;
+        }
+
         // move barrier if screen scrolls
         if (ssfn_dst.y + gfx.glyph_height == gfx.fb_height && ssfn_dst.x + gfx.glyph_width == gfx.fb_width)
             shell_prompt_y_barrier -= gfx.glyph_height;
