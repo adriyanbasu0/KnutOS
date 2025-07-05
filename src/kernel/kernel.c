@@ -27,6 +27,7 @@
 #include <firmware/acpi/acpi.h>
 #include <gdt/gdt.h>
 #include <interrupts/idt.h>
+#include <libk/io/io.h>
 #include <memory/pmm.h>
 #include <memory/slab.h>
 #include <memory/vmm.h>
@@ -36,8 +37,12 @@
 #include <libk/log/log.h>
 #include <libk/stdio/stdio.h>
 
+struct stivale2_struct *global_stivale2_struct = NULL;
+
 void kmain(struct stivale2_struct *stivale2_struct)
 {
+    global_stivale2_struct = stivale2_struct;
+
     framebuffer_init(stivale2_struct, GFX_BLACK);
     serial_init();
 
@@ -52,7 +57,7 @@ void kmain(struct stivale2_struct *stivale2_struct)
     serial_log(INFO, "Kernel started\n");
     kernel_log(INFO, "Kernel started\n");
 
-    pmm_init(stivale2_struct);
+    pmm_init(global_stivale2_struct);
     vmm_init();
     gdt_init();
     idt_init();
@@ -63,7 +68,7 @@ void kmain(struct stivale2_struct *stivale2_struct)
     serial_log(INFO, "CPU Vendor ID String: %s\n", vendor_string);
     kernel_log(INFO, "CPU Vendor ID String: %s\n", vendor_string);
 
-    acpi_init(stivale2_struct);
+    acpi_init(global_stivale2_struct);
 
     apic_init();
 
@@ -77,4 +82,29 @@ void kmain(struct stivale2_struct *stivale2_struct)
 
     for (;;)
         asm ("hlt");
+}
+
+// Annotated system_reboot() implementation for x86_64
+void system_reboot(void) {
+    // 1. Try keyboard controller
+    io_wait();
+    io_outb(0x64, 0xFE);
+    io_wait();
+
+    // 2. Try reset control register (0xCF9)
+    uint8_t val = io_inb(0xCF9);
+    io_outb(0xCF9, (val & 0x0F) | 0x02); // System reset
+    io_outb(0xCF9, (val & 0x0F) | 0x06); // System reset + reset CPU
+
+    // 3. Try Fast A20 and INIT method (0x92)
+    val = io_inb(0x92);
+    io_outb(0x92, val | 0x01); // Set system reset
+
+    // 4. Triple fault (force CPU reset)
+    asm volatile ("lidt (%0)" : : "r"(0));
+    asm volatile ("int $0x03");
+
+    // If all else fails, halt
+    for (;;)
+        asm volatile ("hlt");
 }

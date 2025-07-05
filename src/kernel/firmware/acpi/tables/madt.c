@@ -42,15 +42,10 @@ void madt_init(void)
 
     if (madt == NULL)
     {
-        serial_log(ERROR, "No MADT was found on this computer!\n");
-        kernel_log(ERROR, "No MADT was found on this computer!\n");
-
-
-        serial_log(ERROR, "Kernel halted!\n");
-        kernel_log(ERROR, "Kernel halted!\n");
-
-        for (;;)
-            asm ("hlt");
+        serial_log(ERROR, "No MADT was found on this computer! Falling back to legacy PIC mode.\n");
+        kernel_log(ERROR, "No MADT was found on this computer! Falling back to legacy PIC mode.\n");
+        // Optionally, you can call pic_init() or similar here if you have a PIC fallback
+        return;
     }
 
 

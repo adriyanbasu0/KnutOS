@@ -261,7 +261,7 @@ s5_found:
 }
 
 void acpi_shutdown(void) {
-    acpi_shutdown_hack(
+    int result = acpi_shutdown_hack(
         0, // direct_map_base (adjust if needed)
         find_sdt_adapter,
         io_inb,
@@ -269,5 +269,11 @@ void acpi_shutdown(void) {
         io_outb,
         io_outw
     );
+    if (result != 0) {
+        serial_log(ERROR, "ACPI shutdown failed: FACP/DSDT/PM1 control blocks may be missing or ACPI not enabled.\n");
+        kernel_log(ERROR, "ACPI shutdown failed: FACP/DSDT/PM1 control blocks may be missing or ACPI not enabled.\n");
+        serial_log(ERROR, "This can happen after a soft reboot. Try a cold boot for shutdown to work.\n");
+        kernel_log(ERROR, "This can happen after a soft reboot. Try a cold boot for shutdown to work.\n");
+    }
     for (;;) asm volatile ("hlt");
 }
